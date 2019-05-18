@@ -3,7 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 
 const cors = require('cors')
-var apiRoutes         = require('./routes/api.js');
+var apiRoutes         = require('./routes/api');
 
 const mongoose = require('mongoose')
 mongoose.connect(process.env.MLAB_URI || 'mongodb://localhost/exercise-track' ,  { useNewUrlParser: true })
