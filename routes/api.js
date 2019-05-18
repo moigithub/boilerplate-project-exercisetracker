@@ -7,11 +7,11 @@ const User = require('../models/user')
 const router = express.Router()
 
 router
-  .get('/exercise/new-user',function (req, res){
+  .get('/new-user',function (req, res){
     console.log(req.body)
 
   //console.log(toString);
-    res.json(toString);
+    res.json({aa:"asdf"});
   });
 
 module.exports = router

@@ -15,13 +15,15 @@ app.use(bodyParser.json())
 
 
 app.use(express.static('public'))
+
+//Routing for API 
+app.use('/api/exercise',apiRoutes)
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
 
-//Routing for API 
-app.use('/api', apiRoutes)
 
 
 // Not found middleware
