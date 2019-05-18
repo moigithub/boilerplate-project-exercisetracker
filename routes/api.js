@@ -1,10 +1,14 @@
 'use strict';
-import express from 'express'
+const express = require('express')
+const mongoose = require('mongoose');
+
+const User = require('./models/user.js')
+
 const router = express.Router()
 
 router
   .get('/exercise/new-user',function (req, res){
-    var input = req.query.input;
+    console.log(req.body)
 
   //console.log(toString);
     res.json(toString);
