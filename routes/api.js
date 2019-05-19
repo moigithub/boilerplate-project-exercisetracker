@@ -6,11 +6,24 @@ const User = require('../models/user')
 
 const router = express.Router()
 
-router
-  .get('/new-user',function (req, res){
-    console.log(req.body)
+router.use(function(req, res, next) {
+  console.log('%s %s %s', req.method, req.url, req.path);
+  next();
+});
 
-  //console.log(toString);
+router
+  .post('/new-user',function (req, res){
+    console.log("dsdf",req.body)
+    User.find({username: req.body.username}, function(err, user){
+      if(err) throw err;
+
+      if(user){
+        return res.json({user: user})
+      }
+      
+      User.create({username: req.body.username})
+    })
+    //console.log(toString);
     res.json({aa:"asdf"});
   });
 
