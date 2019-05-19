@@ -14,21 +14,19 @@ router.use(function(req, res, next) {
 router
   .post('/new-user',function (req, res){
     console.log("dsdf",req.body)
-    User.find({username: req.body.username}, function(err, user){
+    User.findOne({username: req.body.username}, function(err, user){
       if(err) throw err;
 
       if(user){
         return res.json({user: user})
       }
-      
-      User.create({username: req.body.username}, function (err, newuser) {
+
+      User.create({username: req.body.username}, function (error, newuser) {
         if (err) throw err
         // saved!
         return res.json({ok:true, user:newuser})
       })
     })
-    //console.log(toString);
-    res.json({aa:"asdf"});
   });
 
 module.exports = router
