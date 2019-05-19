@@ -7,10 +7,10 @@ const Exercise = require('../models/exercise')
 
 const router = express.Router()
 
-router.use(function(req, res, next) {
-  console.log('%s %s %s', req.method, req.url, req.path);
-  next();
-});
+// router.use(function(req, res, next) {
+//   console.log('%s %s %s', req.method, req.url, req.path);
+//   next();
+// });
 
 router
   .get('/users', function(req,res){
@@ -45,11 +45,11 @@ router
     const {userId, description, duration, date} = req.body
 
     // validation
-    if(!userId){ return res.json({error: 'UserId not found'}) }
-    if(!description){ return res.json({error: 'Description not found'}) }
-    if(!duration){ return res.json({error: 'Duration not found'}) }
+    if(!userId){ return res.send('unknown _id') }
+    if(!description){ return res.send('Path `description` is required.') }
+    if(!duration){ return res.send('Path `duration` is required.') }
     if (!/^\d{4}\-\d{2}\-\d{2}$/.test(date)){
-      return res.json({error: 'invalid date format: yyyy-mm-dd'})
+      return res.send(`Cast to Date failed for value "${date}" at path "date"`)
     }
       
     User.findById(userId, function(err, user){
@@ -84,7 +84,7 @@ Return will be the user object with added array log and count (total exercise co
       if(err) throw err;
       
       if (!user){
-        return res.json({error: 'UserId not found'})
+        return res.send('unknown userId')
       }
       
       const query = Exercise.find()
