@@ -21,12 +21,11 @@ router
     })
   })
   .post('/new-user',function (req, res){
-    console.log("dsdf",req.body)
     User.findOne({username: req.body.username}, function(err, user){
       if(err) throw err;
 
       if(user){
-        return res.json({user: 'already exist'})
+        return res.send('username already taken')
       }
 
       User.create({username: req.body.username}, function (error, newuser) {
@@ -57,7 +56,7 @@ router
       if(err) throw err;
 
         if (!user){
-        return res.json({error: 'UserId not found'})
+        return res.send('unknown _id')
       }
       
       Exercise.create({
@@ -80,7 +79,6 @@ I can retrieve a full exercise log of any user by getting
 Return will be the user object with added array log and count (total exercise count).
 */
     const {userId, from, to, limit} = req.query
-    console.log("uid", userId, "from", from, "to", to, "limit", limit)
   
     User.findById(userId, function(err, user){
       if(err) throw err;
@@ -101,7 +99,7 @@ Return will be the user object with added array log and count (total exercise co
         query.where('date').lte( new Date(to) )        
       }
       
-      if(limit) {
+      if(limit && /^\d+$/.test(limit)) {
         query.limit(+limit)
       }
       
