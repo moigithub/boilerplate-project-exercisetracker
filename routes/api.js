@@ -92,10 +92,36 @@ Return will be the user object with added array log and count (total exercise co
       Exercise.find({userId: userId}, function(error, exercises){
         if(error) throw error
         
-        return res.json({user:user, exercises: exercises, count:exercises.length})
+        return res.json({
+          _id:user._id, 
+          username: user.username, 
+          log: exercises.map(e=>(
+            {description: e.description, 
+             duration:e.duration,
+             date:formatDate(e.date)}
+          )), 
+          count:exercises.length
+        })
       })
     })
   })
 
+function formatDate(date) {
+  const MONTHS={
+    0:"Jan",1:"Feb",2:"Mar",3:"Apr",5:"May",
+    6:"Jun",7:"Jul",8:"Aug",9:"Sep",10:"Oct",
+    
+  }
+  //Sun Mar 24 2019
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
 module.exports = router
