@@ -43,12 +43,9 @@ router
   If no date supplied it will use current date. 
   Returned will the the user object with also with the exercise fields added.
   */
-    const id = req.body.userId,
-          description = req.body.description,
-          duration = req.body.duration,
-          date = req.body.date || new Date()
+    const {userId, description, duration, date} = req.body
 
-    User.findById(id, function(err, user){
+    User.findById(userId, function(err, user){
       if(err) throw err;
       
       if (!user){
@@ -56,10 +53,10 @@ router
       }
       
       Exercise.create({
-        userId: id, 
+        userId: userId, 
         description: description,
         duration: duration,
-        date: date
+        date: date  || new Date()
         }, function(err, newExercise){
         
           if(err) throw err;
@@ -68,16 +65,29 @@ router
       })
     })
   })
-  .get('log',function(req,res){
-    console.log(req.query)
-    return res.json({a:123})
-  })
-
-/*
+  .get('/log',function(req,res){
+    /*
 I can retrieve a full exercise log of any user by getting 
 /api/exercise/log with a parameter of userId(_id). 
 Return will be the user object with added array log and count (total exercise count).
 */
-;
+    const {userId, from, to, limit} = req.query
+    console.log("uid", userId, "from", from, "to", to, "limit", limit)
+  
+    User.findById(mongoose.ObjectId(userId), function(err, user){
+      if(err) throw err;
+      
+      if (!user){
+        return res.json({error: 'UserId not found'})
+      }
+      
+      Exercise.find({userId: mongoose.ObjectId(userId)}, function(error, exercises){
+        if(error) throw error
+        
+        return res.json({user:user, exercises: exercises, count:1})
+      })
+    })
+  })
+
 
 module.exports = router
