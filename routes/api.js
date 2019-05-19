@@ -21,7 +21,11 @@ router
         return res.json({user: user})
       }
       
-      User.create({username: req.body.username})
+      User.create({username: req.body.username}, function (err, newuser) {
+        if (err) throw err
+        // saved!
+        return res.json({ok:true, user:newuser})
+      })
     })
     //console.log(toString);
     res.json({aa:"asdf"});
