@@ -89,25 +89,26 @@ Return will be the user object with added array log and count (total exercise co
         return res.json({error: 'UserId not found'})
       }
       
-      Exercise.find({userId: userId}, function(error, exercises){
-        if(error) throw error
-        
-        //filters
-        let data = exercises.slice()
-        
-        if(
-        
-        return res.json({
-          _id:user._id, 
-          username: user.username, 
-          log: exercises.map(e=>(
-            {description: e.description, 
-             duration:e.duration,
-             date:formatDate(e.date)}
-          )), 
-          count:exercises.length
+      Exercise.find({
+          userId: userId,
+          date: {$gte: new Date(from), $lte: new Date(to)}        
         })
-      })
+        .limit(limit)
+        .lean()
+        .exec( function(error, exercises){
+          if(error) throw error
+
+          return res.json({
+            _id:user._id, 
+            username: user.username, 
+            log: exercises.map(e=>(
+              {description: e.description, 
+               duration:e.duration,
+               date:formatDate(e.date)}
+            )), 
+            count:exercises.length
+          })
+        })
     })
   })
 
