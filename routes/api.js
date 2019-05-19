@@ -49,7 +49,7 @@ router
     if(!userId){ return res.json({error: 'UserId not found'}) }
     if(!description){ return res.json({error: 'Description not found'}) }
     if(!duration){ return res.json({error: 'Duration not found'}) }
-    if (/^\d{4}\-\d{2}\-\d{2}$/.test(date)){
+    if (!/^\d{4}\-\d{2}\-\d{2}$/.test(date)){
       return res.json({error: 'invalid date format: yyyy-mm-dd'})
     }
       
@@ -64,7 +64,7 @@ router
         userId: userId, 
         description: description,
         duration: duration,
-        date: new Date(date+"00:00:00")  || new Date()
+        date: new Date(date+" 00:00:00")  || new Date()
         }, function(err, newExercise){
         
           if(err) throw err;
