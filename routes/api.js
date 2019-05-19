@@ -45,16 +45,19 @@ router
   */
     const {userId, description, duration, date} = req.body
 
+    // validation
+    if(!userId){ return res.json({error: 'UserId not found'}) }
+    if(!description){ return res.json({error: 'Description not found'}) }
+    if(!duration){ return res.json({error: 'Duration not found'}) }
+    if (/^\d{4}\-\d{2}\-\d{2}$/.test(date)){
+      return res.json({error: 'invalid date format: yyyy-mm-dd'})
+    }
+      
     User.findById(userId, function(err, user){
       if(err) throw err;
-      
-      if (!user){
+
+        if (!user){
         return res.json({error: 'UserId not found'})
-      }
-      
-      // validation
-      if (/^\d{4}\-\d{2}\-\d{2}$/.test(date)){
-        return res.json({error: 'invalid date format:'})
       }
       
       Exercise.create({
@@ -79,7 +82,7 @@ Return will be the user object with added array log and count (total exercise co
     const {userId, from, to, limit} = req.query
     console.log("uid", userId, "from", from, "to", to, "limit", limit)
   
-    User.findById(mongoose.ObjectId(userId), function(err, user){
+    User.findById(userId, function(err, user){
       if(err) throw err;
       
       if (!user){
