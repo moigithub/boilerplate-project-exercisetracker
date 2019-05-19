@@ -89,11 +89,23 @@ Return will be the user object with added array log and count (total exercise co
         return res.json({error: 'UserId not found'})
       }
       
-      Exercise.find({
-          userId: userId,
-          date: {$gte: new Date(from), $lte: new Date(to)}        
-        })
-        .limit(limit)
+      const query = Exercise.find()
+      
+      query.where('userId').equals( userId)
+      
+      if(from && /^\d{4}\-\d{2}\-\d{2}$/.test(from)){
+        query.where('date').gte( new Date(from) )
+      }
+      
+      if(to && /^\d{4}\-\d{2}\-\d{2}$/.test(to)){
+        query.where('date').lte( new Date(to) )        
+      }
+      
+      if(limit) {
+        query.limit(+limit)
+      }
+      
+      query
         .lean()
         .exec( function(error, exercises){
           if(error) throw error
