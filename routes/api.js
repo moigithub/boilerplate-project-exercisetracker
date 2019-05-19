@@ -89,10 +89,10 @@ Return will be the user object with added array log and count (total exercise co
         return res.json({error: 'UserId not found'})
       }
       
-      Exercise.find({userId: mongoose.ObjectId(userId)}, function(error, exercises){
+      Exercise.find({userId: userId}, function(error, exercises){
         if(error) throw error
         
-        return res.json({user:user, exercises: exercises, count:1})
+        return res.json({user:user, exercises: exercises, count:exercises.length})
       })
     })
   })
