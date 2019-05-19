@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
 
 // Not found middleware
 app.use((req, res, next) => {
+  console.log(req.path)
   return next({status: 404, message: 'not found'})
 })
 
