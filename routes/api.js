@@ -52,11 +52,16 @@ router
         return res.json({error: 'UserId not found'})
       }
       
+      // validation
+      if (/^\d{4}\-\d{2}\-\d{2}$/.test(date)){
+        return res.json({error: 'invalid date format:'})
+      }
+      
       Exercise.create({
         userId: userId, 
         description: description,
         duration: duration,
-        date: date  || new Date()
+        date: new Date(date+"00:00:00")  || new Date()
         }, function(err, newExercise){
         
           if(err) throw err;
