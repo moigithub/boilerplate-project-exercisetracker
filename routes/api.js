@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose');
 
 const User = require('../models/user')
+const Exercise = require('../models/exercise')
 
 const router = express.Router()
 
@@ -47,12 +48,36 @@ router
           duration = req.body.duration,
           date = req.body.date || new Date()
 
-    User.create({}, function(err,newUser){
+    User.findById(id, function(err, user){
       if(err) throw err;
       
-      res.json(newUser)
+      if (!user){
+        return res.json({error: 'UserId not found'})
+      }
+      
+      Exercise.create({
+        userId: id, 
+        description: description,
+        duration: duration,
+        date: date
+        }, function(err, newExercise){
+        
+          if(err) throw err;
+
+          return res.json(newExercise)
+      })
     })
   })
+  .get('log',function(req,res){
+    console.log(req.query)
+    return res.json({a:123})
+  })
+
+/*
+I can retrieve a full exercise log of any user by getting 
+/api/exercise/log with a parameter of userId(_id). 
+Return will be the user object with added array log and count (total exercise count).
+*/
 ;
 
 module.exports = router
