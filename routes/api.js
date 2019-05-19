@@ -92,6 +92,11 @@ Return will be the user object with added array log and count (total exercise co
       Exercise.find({userId: userId}, function(error, exercises){
         if(error) throw error
         
+        //filters
+        let data = exercises.slice()
+        
+        if(
+        
         return res.json({
           _id:user._id, 
           username: user.username, 
@@ -108,20 +113,25 @@ Return will be the user object with added array log and count (total exercise co
 
 function formatDate(date) {
   const MONTHS={
-    0:"Jan",1:"Feb",2:"Mar",3:"Apr",5:"May",
-    6:"Jun",7:"Jul",8:"Aug",9:"Sep",10:"Oct",
-    
+    "00":"Jan","01":"Feb","02":"Mar","03":"Apr","04":"May",
+    "05":"Jun","06":"Jul","07":"Aug","08":"Sep","09":"Oct",
+    "10":"Nov","11":"Dec"
+  }
+  const WEEKDAYS={
+    //Sunday - Saturday : 0 - 6
+    0:"Sun",1:"Mon",2:"Tue",3:"Wed",4:"Thu",5:"Fri",6:"Sat"
   }
   //Sun Mar 24 2019
     var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
+        month = '' + (d.getMonth()),
         day = '' + d.getDate(),
-        year = d.getFullYear();
+        year = d.getFullYear(),
+        weekday = d.getDay();
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
 
-    return [year, month, day].join('-');
+    return `${WEEKDAYS[weekday]} ${MONTHS[month]} ${day} ${year}`
 }
 
 module.exports = router
